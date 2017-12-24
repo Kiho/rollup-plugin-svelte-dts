@@ -42,7 +42,7 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
 
     let outputMethods = sbMethods.ToString();
     if (outputMethods) {
-        outputMethods = outputMethods.split('): ').join(' => ');
+        outputMethods = outputMethods.split('): ').join(') => ');
         outputMethods = String.replaceAll(outputMethods, '; ', ';\n');
         sbOutput.Append(`{\n${outputMethods}\n}\n`);
     }

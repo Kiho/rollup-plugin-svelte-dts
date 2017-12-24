@@ -33,7 +33,7 @@ function printInferredTypes(fileName, name, options) {
     sbOutput.Append("declare class " + moduleName + " extends Svelte<" + moduleName + "Options>\n");
     var outputMethods = sbMethods.ToString();
     if (outputMethods) {
-        outputMethods = outputMethods.split('): ').join(' => ');
+        outputMethods = outputMethods.split('): ').join(') => ');
         outputMethods = String.replaceAll(outputMethods, '; ', ';\n');
         sbOutput.Append("{\n" + outputMethods + "\n}\n");
     }

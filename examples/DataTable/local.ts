@@ -22,7 +22,7 @@ export default {
             if (page) {
                 props.currentPage = page;
             }
-            // console.log('getPaged - props', props);	
+            console.log('getPaged - props', props);	
             this.set(props);
             this.processRows(this.get('rows'));	
         }
