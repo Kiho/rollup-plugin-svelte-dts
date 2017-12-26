@@ -1,42 +1,37 @@
-import svelte from 'rollup-plugin-svelte';
-import typescript from 'rollup-plugin-typescript2';
-import tscompile from 'typescript';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import buble from 'rollup-plugin-buble';
-import uglify from 'rollup-plugin-uglify';
+import buble from 'rollup-plugin-buble'
 
-import sveltedts from './plugin/rollup-plugin-svelte-dts';
-
-const production = !process.env.ROLLUP_WATCH;
-
-console.log('production', production);
+const pack = require('./package.json')
+const YEAR = new Date().getFullYear()
 
 export default {
-	input: 'examples/main.ts',	
-	output: {
-		sourcemap: true,	
-		format: 'iife',
-		file: 'public/app.js',
-	},
-	name: 'app',
+	input: 'plugin/index.js',	
+	output:[
+		{	
+			format: 'cjs',
+			file: pack.main,
+			name: 'rollup-plugin-svelte-dts',	
+		}, {
+			format: "es",
+			file: pack.jsnext,
+			name: 'rollup-plugin-svelte-dts',
+		}
+	], 	
 	plugins: [
-		commonjs(),
-		sveltedts(),
-		typescript({typescript: tscompile}),
-		svelte({
-			dev: !production,
-			css: css => {
-				css.write('public/app.css');
-			},
-			cascade: true
-		}),
-		resolve({
-			jsnext: true,
-			main: true,
-			browser: true
-		}),
-		production && buble({ exclude: 'node_modules/**' }),
-		production && uglify()
-	]
-};
+		buble()
+	],
+	banner   () {
+		return `/*!
+* ${pack.name} v${pack.version}
+* (c) ${YEAR} ${pack.author}
+* Release under the ${pack.license} License.
+*/`
+	},
+
+	// Cleaner console
+	onwarn (warning) {
+		warning = warning && warning.message || warning || ''
+		if (warning.startsWith('Treating')) {
+			return
+		}
+	}
+}
