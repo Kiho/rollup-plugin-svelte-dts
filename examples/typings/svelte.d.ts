@@ -22,4 +22,6 @@ declare class Svelte<T> {
   teardown();
 
   oncreate();
+  ondestroy();
+  destroy();
 }
