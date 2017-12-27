@@ -1,27 +1,32 @@
-declare class Svelte<T> {
-  constructor(options: { target: Element, data?: any, store?: any });
+declare class Svelte {
+    constructor(options: { target: Element, data?: any, store?: any });
 
-  get(): T;
-  get(name: string): any;
+    get(name?: string): any;
+    set(data: any): void;
 
-  set(data: T);
+    on(
+        eventName: string,
+        callback?: (event?: any) => any)
+        : () => { cancel: () => any };
 
-  on(
-      eventName: string,
-      callback?: (event?: any) => any)
-      : () => { cancel: () => any };
+    fire(eventName: string, event?: any);
 
-  fire(eventName: string, event?: any);
+    observe(
+        name: string,
+        callback: (newValue?, oldValue?) => any,
+        options?: { init?: boolean, defer?: boolean })
+        : () => { cancel: () => any };
 
-  observe(
-      name: string,
-      callback: (newValue?, oldValue?) => any,
-      options?: { init?: boolean, defer?: boolean })
-      : () => { cancel: () => any };
+    oncreate(): void;
 
-  teardown();
+    ondestroy(): void;
 
-  oncreate();
-  ondestroy();
-  destroy();
+    destroy(): void;
+}
+
+declare class ISvelte<T> extends Svelte {
+    get(): T;
+    get(name: string): any;
+  
+    set(data: T): void;
 }

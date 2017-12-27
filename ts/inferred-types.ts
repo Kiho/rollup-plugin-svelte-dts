@@ -38,7 +38,7 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
         sbOutput.Append(outputOptions + '\n');
     }
 
-    sbOutput.Append(`declare class ${moduleName} extends Svelte<${moduleName}Options>\n`);
+    sbOutput.Append(`declare class ${moduleName} extends ISvelte<${moduleName}Options>\n`);
 
     let outputMethods = sbMethods.ToString();
     if (outputMethods) {
