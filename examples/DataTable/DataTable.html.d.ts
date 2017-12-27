@@ -28,7 +28,7 @@ exportable?: boolean;
 printable?: boolean;
 getList?: (p?: any) => any;
 }
-declare class DataTable extends Svelte<DataTableOptions>
+declare class DataTable extends ISvelte<DataTableOptions>
 {
     search: (e: any) => void;
    click: (row: any) => void;
