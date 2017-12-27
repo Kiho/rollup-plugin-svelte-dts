@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-svelte-dts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Create definition files from svelte JavaScript files",
   "main": "dist/rollup-plugin-svelte-dts.common.js",
   "jsnext": "dist/rollup-plugin-svelte-dts.es.js",
