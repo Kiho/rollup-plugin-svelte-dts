@@ -33,12 +33,14 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
 
     const moduleName = capitalize(name.replace('.html', ''));
     const outputOptions = sbData.ToString();
+    let svelteBase = 'Svelte'
     if (outputOptions) {
         sbOutput.Append(`interface ${moduleName}Options `);
         sbOutput.Append(outputOptions + '\n');
+        svelteBase = `ISvelte<${moduleName}Options>`;
     }
 
-    sbOutput.Append(`declare class ${moduleName} extends ISvelte<${moduleName}Options>\n`);
+    sbOutput.Append(`declare class ${moduleName} extends ${svelteBase}\n`);
 
     let outputMethods = sbMethods.ToString();
     if (outputMethods) {
@@ -50,6 +52,9 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
         sbOutput.Append('{ }\n');
     }
 
+    if (!outputMethods && !outputOptions) {
+        return null;
+    }
     sbOutput.Append(`export default ${moduleName}`);
     const result = sbOutput.ToString();
 
@@ -72,7 +77,7 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
 
     function printJsonType(name: string, symbol: ts.Symbol) {
         if (symbol.members) {
-            console.log(`export interface ${capitalize(name)} {`);
+            // console.log(`export interface ${capitalize(name)} {`);
             const isMethods = name === 'Methods';
             symbol.members.forEach(member => {
                 const k = member.name;
@@ -93,9 +98,9 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
                     }
                 }
                 if (!typeName) {
-                    console.log(`// Sorry, could not get type name for ${k}!`);
+                    // console.log(`// Sorry, could not get type name for ${k}!`);
                 } else {
-                    console.log(`    ${k}: ${typeName};`);
+                    // console.log(`    ${k}: ${typeName};`);
                     if (k === 'data') {
                         let options = typeName.replace('():', '');
                         options = String.replaceAll(options, ': ', '?: ')
@@ -103,7 +108,7 @@ function printInferredTypes(fileName: string, name:string, options: ts.CompilerO
                     }
                 }
             });
-            console.log(`}`);
+            // console.log(`}`);
         }
     }
 

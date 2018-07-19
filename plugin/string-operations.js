@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var StringBuilder = /** @class */ (function () {
     function StringBuilder(value) {
         if (value === void 0) { value = String.Empty; }
@@ -22,7 +24,7 @@ var StringBuilder = /** @class */ (function () {
     };
     return StringBuilder;
 }());
-export { StringBuilder };
+exports.StringBuilder = StringBuilder;
 var String = /** @class */ (function () {
     function String() {
     }
@@ -210,4 +212,4 @@ var String = /** @class */ (function () {
     String.Empty = "";
     return String;
 }());
-export { String };
+exports.String = String;

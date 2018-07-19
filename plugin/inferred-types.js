@@ -1,5 +1,7 @@
-import * as ts from "typescript";
-import { String, StringBuilder } from "./string-operations";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var ts = require("typescript");
+var string_operations_1 = require("./string-operations");
 var defaultOptions = {
     noEmitOnError: true, noImplicitAny: true,
     target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
@@ -10,9 +12,9 @@ function printInferredTypes(fileName, name, options) {
     var checker = program.getTypeChecker();
     var knownTypes = {};
     var pendingTypes = [];
-    var sbData = new StringBuilder('');
-    var sbMethods = new StringBuilder('');
-    var sbOutput = new StringBuilder('');
+    var sbData = new string_operations_1.StringBuilder('');
+    var sbMethods = new string_operations_1.StringBuilder('');
+    var sbOutput = new string_operations_1.StringBuilder('');
     fileName = fileName.split('\\').join('/');
     for (var _i = 0, _a = program.getSourceFiles(); _i < _a.length; _i++) {
         var sourceFile = _a[_i];
@@ -26,19 +28,24 @@ function printInferredTypes(fileName, name, options) {
     }
     var moduleName = capitalize(name.replace('.html', ''));
     var outputOptions = sbData.ToString();
+    var svelteBase = 'Svelte';
     if (outputOptions) {
         sbOutput.Append("interface " + moduleName + "Options ");
         sbOutput.Append(outputOptions + '\n');
+        svelteBase = "ISvelte<" + moduleName + "Options>";
     }
-    sbOutput.Append("declare class " + moduleName + " extends ISvelte<" + moduleName + "Options>\n");
+    sbOutput.Append("declare class " + moduleName + " extends " + svelteBase + "\n");
     var outputMethods = sbMethods.ToString();
     if (outputMethods) {
         outputMethods = outputMethods.split('): ').join(') => ');
-        outputMethods = String.replaceAll(outputMethods, '; ', ';\n');
+        outputMethods = string_operations_1.String.replaceAll(outputMethods, '; ', ';\n');
         sbOutput.Append("{\n" + outputMethods + "\n}\n");
     }
     else {
         sbOutput.Append('{ }\n');
+    }
+    if (!outputMethods && !outputOptions) {
+        return null;
     }
     sbOutput.Append("export default " + moduleName);
     var result = sbOutput.ToString();
@@ -60,7 +67,7 @@ function printInferredTypes(fileName, name, options) {
     }
     function printJsonType(name, symbol) {
         if (symbol.members) {
-            console.log("export interface " + capitalize(name) + " {");
+            // console.log(`export interface ${capitalize(name)} {`);
             var isMethods_1 = name === 'Methods';
             symbol.members.forEach(function (member) {
                 var k = member.name;
@@ -82,18 +89,18 @@ function printInferredTypes(fileName, name, options) {
                     }
                 }
                 if (!typeName) {
-                    console.log("// Sorry, could not get type name for " + k + "!");
+                    // console.log(`// Sorry, could not get type name for ${k}!`);
                 }
                 else {
-                    console.log("    " + k + ": " + typeName + ";");
+                    // console.log(`    ${k}: ${typeName};`);
                     if (k === 'data') {
                         var options_1 = typeName.replace('():', '');
-                        options_1 = String.replaceAll(options_1, ': ', '?: ');
-                        sbData.Append("    " + String.replaceAll(options_1, '; ', ';\n'));
+                        options_1 = string_operations_1.String.replaceAll(options_1, ': ', '?: ');
+                        sbData.Append("    " + string_operations_1.String.replaceAll(options_1, '; ', ';\n'));
                     }
                 }
             });
-            console.log("}");
+            // console.log(`}`);
         }
     }
     function getMemberTypeName(memberName, memberType) {
@@ -144,4 +151,4 @@ function printInferredTypes(fileName, name, options) {
     // console.log(result);
     return result;
 }
-export default printInferredTypes;
+exports.default = printInferredTypes;
